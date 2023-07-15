@@ -75,7 +75,7 @@ class SubProcess {
 		if loginIsShell {
 			return "/var/jb/bin/zsh"
 		}
-		return ["/var/jb/usr/bin/login", "/usr/bin/login"]
+		return [jbpath("/var/jb/usr/bin/login"), "/usr/bin/login"]
 			.first { (try? URL(fileURLWithPath: $0).checkResourceIsReachable()) == true } ?? "/usr/bin/login"
 		#endif
 	}()
@@ -119,15 +119,23 @@ class SubProcess {
 
 	private static var shell: String {
 		if let result = userPasswd?.pw_shell {
-			return String(cString: result)
+			return String(cString: jbpath(result))
 		}
 		return "/bin/bash"
 	}
 
 	private static var homeDirectory: String {
+        let logger = Logger(subsystem: "ws.hbang.Terminal", category: "SubProcess")
 		if let result = userPasswd?.pw_dir {
-			return String(cString: result)
+            let s:String = String(cString: result);
+            logger.debug("result=\(s, privacy: .public)")
+            
+            let ss:String = jbpath(s);
+            logger.debug("result=\(ss, privacy: .public)")
+			return ss
+            
 		}
+        logger.debug("result=NSHomeDirectory()")
 		return NSHomeDirectory()
 	}
 
@@ -150,6 +158,9 @@ class SubProcess {
 		if childPID != nil {
 			throw SubProcessIllegalStateError.alreadyStarted
 		}
+        
+        
+        logger.debug("homeDirectory=\(Self.homeDirectory, privacy: .public), shell=\(Self.shell, privacy: .public)")
 
 		// Initialise the pty
 		var windowSize = screenSize.windowSize
@@ -178,6 +189,7 @@ class SubProcess {
 			chdir(initialDirectory ?? Self.homeDirectory)
 		} else {
 			argv = (Self.loginArgv + [initialDirectory ?? Self.homeDirectory, Self.shell]).cStringArray
+            logger.debug("arv=\(Self.loginArgv, privacy: .public), \(Self.homeDirectory, privacy: .public), \(Self.shell, privacy: .public)" )
 		}
 		let envp = (ProcessInfo.processInfo.environment.map { "\($0)=\($1)" } + Self.baseEnvp + [
 			"LANG=\(localeCode)"
@@ -187,6 +199,9 @@ class SubProcess {
 			argv.deallocate()
 			envp.deallocate()
 		}
+        
+        logger.debug("Self.login=\(Self.login, privacy: .public)" )
+        
 
 		var pid = pid_t()
 		let result = ie_posix_spawn(&pid, Self.login, &actions, nil, argv, envp)
@@ -208,6 +223,7 @@ class SubProcess {
 		}
 		signalSource = DispatchSource.makeProcessSource(identifier: pid, eventMask: .exit, queue: queue)
 		signalSource?.setEventHandler { [weak self] in
+            self?.logger.debug(".exit")
 			try? self?.stop()
 		}
 
@@ -275,12 +291,15 @@ class SubProcess {
 		case 0:
 			// Zero-length data is an indicator of EOF. This can happen if the user exits the terminal by
 			// typing `exit` or ^D, or if there’s a catastrophic failure (e.g. /bin/login is broken).
+            logger.debug("case 0")
 			try? stop(fromError: false)
 
 		default:
 			// Read from output and notify delegate.
 			let bytes = buffer.bindMemory(to: UTF8Char.self, capacity: bytesRead)
 			let data = Array(UnsafeBufferPointer(start: bytes, count: bytesRead))
+            let str = data.map { String($0) }.joined(separator: ", ")
+            logger.debug("output=\(str, privacy: .public)" )
 			delegate?.subProcess(didReceiveData: data)
 		}
 		buffer.deallocate()
@@ -340,7 +359,8 @@ class SubProcess {
 		if childPID != nil {
 			logger.error("Illegal state - SubProcess deallocated while still running")
 		}
-
+        
+        logger.debug("deinit")
 		try? stop(fromError: true)
 	}
 

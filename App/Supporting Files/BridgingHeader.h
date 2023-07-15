@@ -5,3 +5,5 @@
 @import NewTermCommon;
 
 #import <TargetConditionals.h>
+
+#include "jbpath.h"
