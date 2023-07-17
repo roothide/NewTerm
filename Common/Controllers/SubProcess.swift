@@ -75,7 +75,7 @@ class SubProcess {
 		if loginIsShell {
 			return "/var/jb/bin/zsh"
 		}
-		return [jbpath("/var/jb/usr/bin/login"), "/usr/bin/login"]
+		return [jbroot("/usr/bin/login"), "/usr/bin/login"]
 			.first { (try? URL(fileURLWithPath: $0).checkResourceIsReachable()) == true } ?? "/usr/bin/login"
 		#endif
 	}()
@@ -93,7 +93,7 @@ class SubProcess {
 		// handle passing the -q (force hush login) flag. iTerm2 does this, so I guess it’s fine?
 		let hushLoginURL = URL(fileURLWithPath: homeDirectory)/".hushlogin"
 		let hushLogin = (try? hushLoginURL.checkResourceIsReachable()) == true
-		return ["login", "-fp\(hushLogin ? "q" : "")", NSUserName(), loginHelper]
+		return ["login", "-fp\(hushLogin ? "q" : "")", NSUserName(), jbroot_revert(loginHelper)]
 		#endif
 	}
 
@@ -119,7 +119,7 @@ class SubProcess {
 
 	private static var shell: String {
 		if let result = userPasswd?.pw_shell {
-			return String(cString: jbpath(result))
+			return String(cString: jbroot(result))
 		}
 		return "/bin/bash"
 	}
@@ -130,7 +130,7 @@ class SubProcess {
             let s:String = String(cString: result);
             logger.debug("result=\(s, privacy: .public)")
             
-            let ss:String = jbpath(s);
+            let ss:String = jbroot(s);
             logger.debug("result=\(ss, privacy: .public)")
 			return ss
             
@@ -204,7 +204,7 @@ class SubProcess {
         
 
 		var pid = pid_t()
-		let result = ie_posix_spawn(&pid, Self.login, &actions, nil, argv, envp)
+        let result = ie_posix_spawn(&pid, (jbroot_revert(Self.login) as NSString).utf8String, &actions, nil, argv, envp)
 		close(fds.replica)
 		if result != 0 {
 			// Fork failed.

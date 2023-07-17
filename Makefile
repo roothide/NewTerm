@@ -3,7 +3,7 @@ export ARCHS = arm64
 
 ifeq ($(ROOTLESS),1)
 	export DEB_ARCH = iphoneos-arm64
-	export INSTALL_PREFIX = /var/jb
+	#export INSTALL_PREFIX = /var/jb
 else
 	export DEB_ARCH = iphoneos-arm
 endif

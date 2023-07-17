@@ -67,11 +67,11 @@
 		4ED1273125F9E8F60049F59B /* UIColor+AppColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ED1273025F9E8F60049F59B /* UIColor+AppColors.swift */; };
 		4EDC998E26F4401B0030C1F9 /* SettingsInterfaceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EDC998D26F4401B0030C1F9 /* SettingsInterfaceView.swift */; };
 		4EECEADF289A90D300AA919B /* TabToolbarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EECEADE289A90D300AA919B /* TabToolbarView.swift */; };
-		8406F2532A51E807006DC43A /* jbpath.h in Headers */ = {isa = PBXBuildFile; fileRef = 8406F2522A51E7CD006DC43A /* jbpath.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8406F25B2A51F0D5006DC43A /* libjbpath.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 8406F2592A51F0D4006DC43A /* libjbpath.dylib */; platformFilter = ios; };
 		8406F25C2A51F0D5006DC43A /* libiosexec.1.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 8406F25A2A51F0D4006DC43A /* libiosexec.1.tbd */; platformFilter = ios; settings = {ATTRIBUTES = (Required, ); }; };
 		8406F25D2A51F0DB006DC43A /* libiosexec.1.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 8406F25A2A51F0D4006DC43A /* libiosexec.1.tbd */; };
 		8406F25E2A51F0DD006DC43A /* libjbpath.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 8406F2592A51F0D4006DC43A /* libjbpath.dylib */; platformFilter = ios; };
+		84960E232A6577AA0091E97F /* jbroot.h in Headers */ = {isa = PBXBuildFile; fileRef = 84960E222A6577A70091E97F /* jbroot.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		CF6B3BAA244C4538000A608B /* LogoHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF6B3BA9244C4537000A608B /* LogoHeaderView.swift */; };
 		CF71BC9322BB6DEA00AFB1E1 /* NewTermCommon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CF71BC8422BB6DBA00AFB1E1 /* NewTermCommon.framework */; };
 		CF71BC9722BB6E0300AFB1E1 /* Preferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFBB96C322B5481B00585BE6 /* Preferences.swift */; };
@@ -211,11 +211,11 @@
 		4EDC998D26F4401B0030C1F9 /* SettingsInterfaceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsInterfaceView.swift; sourceTree = "<group>"; };
 		4EECEADE289A90D300AA919B /* TabToolbarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabToolbarView.swift; sourceTree = "<group>"; };
 		8406F24A2A51DF18006DC43A /* libjbpath.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libjbpath.dylib; path = ../Sileo/libjbpath.dylib; sourceTree = "<group>"; };
-		8406F2522A51E7CD006DC43A /* jbpath.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = jbpath.h; sourceTree = "<group>"; };
 		8406F2542A51EFDA006DC43A /* libiosexec.1.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libiosexec.1.tbd; path = Vendor/libiosexec.1.tbd; sourceTree = "<group>"; };
 		8406F2582A51F0D4006DC43A /* libiosexec.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = libiosexec.h; sourceTree = "<group>"; };
 		8406F2592A51F0D4006DC43A /* libjbpath.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libjbpath.dylib; sourceTree = "<group>"; };
 		8406F25A2A51F0D4006DC43A /* libiosexec.1.tbd */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.text-based-dylib-definition"; path = libiosexec.1.tbd; sourceTree = "<group>"; };
+		84960E222A6577A70091E97F /* jbroot.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = jbroot.h; sourceTree = "<group>"; };
 		CF22F9B31FFB97F7003175DE /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		CF6B3BA9244C4537000A608B /* LogoHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogoHeaderView.swift; sourceTree = "<group>"; };
 		CF71BC5F22BB657500AFB1E1 /* PrefixHeader.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PrefixHeader.pch; sourceTree = "<group>"; };
@@ -340,7 +340,7 @@
 		CF22F9A81FFB97F7003175DE = {
 			isa = PBXGroup;
 			children = (
-				8406F2522A51E7CD006DC43A /* jbpath.h */,
+				84960E222A6577A70091E97F /* jbroot.h */,
 				8406F25A2A51F0D4006DC43A /* libiosexec.1.tbd */,
 				8406F2582A51F0D4006DC43A /* libiosexec.h */,
 				8406F2592A51F0D4006DC43A /* libjbpath.dylib */,
@@ -574,7 +574,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				CF71BCDC22BB737700AFB1E1 /* NewTermCommon.h in Headers */,
-				8406F2532A51E807006DC43A /* jbpath.h in Headers */,
+				84960E232A6577AA0091E97F /* jbroot.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
