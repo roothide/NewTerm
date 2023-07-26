@@ -93,7 +93,7 @@ class SubProcess {
 		// handle passing the -q (force hush login) flag. iTerm2 does this, so I guess it’s fine?
 		let hushLoginURL = URL(fileURLWithPath: homeDirectory)/".hushlogin"
 		let hushLogin = (try? hushLoginURL.checkResourceIsReachable()) == true
-		return ["login", "-fp\(hushLogin ? "q" : "")", NSUserName(), jbroot_revert(loginHelper)]
+		return ["login", "-fp\(hushLogin ? "q" : "")", NSUserName(), rootfs(loginHelper)]
 		#endif
 	}
 
@@ -204,7 +204,7 @@ class SubProcess {
         
 
 		var pid = pid_t()
-        let result = ie_posix_spawn(&pid, (jbroot_revert(Self.login) as NSString).utf8String, &actions, nil, argv, envp)
+        let result = ie_posix_spawn(&pid, (rootfs(Self.login) as NSString).utf8String, &actions, nil, argv, envp)
 		close(fds.replica)
 		if result != 0 {
 			// Fork failed.
