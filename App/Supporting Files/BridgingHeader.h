@@ -6,4 +6,4 @@
 
 #import <TargetConditionals.h>
 
-#include "jbroot.h"
+#include "roothide.h"

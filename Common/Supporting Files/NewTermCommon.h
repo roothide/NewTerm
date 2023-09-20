@@ -9,7 +9,7 @@
 #import <spawn.h>
 #import <pwd.h>
 
-#include "jbroot.h"
+#include "roothide.h"
 
 #if TARGET_OS_MACCATALYST || TARGET_OS_SIMULATOR
 static inline int ie_getpwuid_r(uid_t uid, struct passwd *pw, char *buf, size_t buflen, struct passwd **pwretp) {
