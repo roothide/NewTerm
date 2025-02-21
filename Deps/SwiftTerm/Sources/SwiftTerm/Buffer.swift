@@ -15,14 +15,14 @@ import Foundation
  *
  * Some of the saved state information is also tracked here.
  */
-class Buffer {
+public class Buffer {
     var _lines: CircularList<BufferLine>
     var xDisp, _yDisp, xBase: Int
     var _x, _y, _yBase: Int
     
     // this keeps incrementing even as we run out of space in _lines and trim out
     // old lines.
-    var linesTop: Int 
+    public var linesTop: Int 
     
     /// This is the index into the `lines` array that corresponds to the top row of displayed
     /// content in the terminal when the scroll is zero.   So the terminal contents that the application
@@ -171,7 +171,7 @@ class Buffer {
     
     weak var terminal: Terminal!
     
-    var lines : CircularList<BufferLine> {
+    public var lines : CircularList<BufferLine> {
         get { return _lines }
     }
     

@@ -59,6 +59,10 @@ open class UIHostingView<Content: View>: UIView {
     }
     
     private let rootViewHostingController: _ContentHostingController
+
+    public var get_rootViewHostingController: UIViewController? {
+        rootViewHostingController as? UIViewController
+    }
     
     public var shouldResizeToFitContent: Bool {
         get {
@@ -89,6 +93,8 @@ open class UIHostingView<Content: View>: UIView {
         self.rootViewHostingController.rootView.parent = rootViewHostingController
 
         super.init(frame: .zero)
+
+        _fixSafeAreaInsets()
                 
         addSubview(rootViewHostingController.view)
         
@@ -103,13 +109,13 @@ open class UIHostingView<Content: View>: UIView {
     override open func willMove(toSuperview newSuperview: UIView?) {
         super.willMove(toSuperview: superview)
         
-        rootViewHostingController._navigationController = superview?.nearestViewController?.nearestNavigationController ?? (superview?.nearestViewController as? UINavigationController)
+        // rootViewHostingController._navigationController = superview?.nearestViewController?.nearestNavigationController ?? (superview?.nearestViewController as? UINavigationController)
     }
     
     override open func didMoveToSuperview() {
         super.didMoveToSuperview()
         
-        rootViewHostingController._navigationController = superview?.nearestViewController?.nearestNavigationController ?? (superview?.nearestViewController as? UINavigationController)
+        // rootViewHostingController._navigationController = superview?.nearestViewController?.nearestNavigationController ?? (superview?.nearestViewController as? UINavigationController)
     }
     
     override open func systemLayoutSizeFitting(_ targetSize: CGSize) -> CGSize {
