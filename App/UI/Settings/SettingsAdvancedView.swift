@@ -65,7 +65,7 @@ struct SettingsAdvancedView: View {
 
 			PreferencesGroup(header: Text("Locale"),
 											 footer: Text("NewTerm will ask terminal programs to use this locale. Not all programs support this. This will not apply to currently open tabs, and may be overridden by shell startup scripts.")) {
-				PreferencesPicker(selection: preferences.$preferredLocale,
+				PreferencesPicker(selection: $preferences.preferredLocale,
 													label: Text("Language"),
 													valueLabel: localeName,
 													asLink: true) {

@@ -15,7 +15,9 @@ class KeyboardToolbarInputView: UIInputView {
 
 	init(delegate: KeyboardToolbarViewDelegate?, toolbars: [Toolbar], state: KeyboardToolbarViewState) {
 		super.init(frame: .zero, inputViewStyle: .keyboard)
-
+        
+        setContentHuggingPriority(.fittingSizeLevel, for: .vertical)
+        setContentCompressionResistancePriority(.fittingSizeLevel, for: .vertical)
 		translatesAutoresizingMaskIntoConstraints = false
 		allowsSelfSizing = true
 
@@ -23,9 +25,13 @@ class KeyboardToolbarInputView: UIInputView {
 			KeyboardToolbarView(delegate: delegate, toolbars: toolbars)
 				.environmentObject(state)
 		))
+//        hostingView = UIHostingView(rootView: AnyView(
+//            KeyboardToolbarViewTest()
+//        ))
 		hostingView.translatesAutoresizingMaskIntoConstraints = false
 		hostingView.shouldResizeToFitContent = true
-		hostingView.setContentHuggingPriority(.fittingSizeLevel, for: .vertical)
+        hostingView.setContentHuggingPriority(.fittingSizeLevel, for: .vertical)
+        hostingView.setContentCompressionResistancePriority(.fittingSizeLevel, for: .vertical)
 		addSubview(hostingView)
 
 		NSLayoutConstraint.activate([
@@ -35,6 +41,11 @@ class KeyboardToolbarInputView: UIInputView {
 			hostingView.bottomAnchor.constraint(equalTo: self.bottomAnchor)
 		])
 	}
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        NSLog("NewTermLog: layoutSubviews frame=\(self.frame) safeArea=\(self.safeAreaInsets) hostview=\(hostingView.frame) hvcview=\(hostingView.get_rootViewHostingController?.view.frame) safeArea=\(hostingView.get_rootViewHostingController?.view.safeAreaInsets)")
+    }
 
 	required init?(coder: NSCoder) {
 		fatalError("init(coder:) has not been implemented")

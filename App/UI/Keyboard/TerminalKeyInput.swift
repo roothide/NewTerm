@@ -78,34 +78,34 @@ class TerminalKeyInput: TextInputBase {
 		smartInsertDeleteType = .no
 
 		var toolbars: [Toolbar] = [.fnKeys, .secondary]
-		if UIDevice.current.userInterfaceIdiom == .pad {
-			let leadingView = KeyboardToolbarPadItemView(delegate: self,
-																									 toolbar: .padPrimaryLeading,
-																									 state: state)
-			let trailingView = KeyboardToolbarPadItemView(delegate: self,
-																										toolbar: .padPrimaryTrailing,
-																										state: state)
-
-			inputAssistantItem.allowsHidingShortcuts = false
-
-			if #available(iOS 16, *) {
-				inputAssistantItem.leadingBarButtonGroups += [
-					.fixedGroup(items: [UIBarButtonItem(customView: leadingView)])
-				]
-				inputAssistantItem.trailingBarButtonGroups += [
-					.fixedGroup(items: [UIBarButtonItem(customView: trailingView)])
-				]
-			} else {
-				inputAssistantItem.leadingBarButtonGroups += [
-					UIBarButtonItemGroup(barButtonItems: [UIBarButtonItem(customView: leadingView)], representativeItem: nil)
-				]
-				inputAssistantItem.trailingBarButtonGroups += [
-					UIBarButtonItemGroup(barButtonItems: [UIBarButtonItem(customView: trailingView)], representativeItem: nil)
-				]
-			}
-		} else {
+//		if UIDevice.current.userInterfaceIdiom == .pad {
+//			let leadingView = KeyboardToolbarPadItemView(delegate: self,
+//																									 toolbar: .padPrimaryLeading,
+//																									 state: state)
+//			let trailingView = KeyboardToolbarPadItemView(delegate: self,
+//																										toolbar: .padPrimaryTrailing,
+//																										state: state)
+//
+//			inputAssistantItem.allowsHidingShortcuts = false
+//
+//			if #available(iOS 16, *) {
+//				inputAssistantItem.leadingBarButtonGroups += [
+//					.fixedGroup(items: [UIBarButtonItem(customView: leadingView)])
+//				]
+//				inputAssistantItem.trailingBarButtonGroups += [
+//					.fixedGroup(items: [UIBarButtonItem(customView: trailingView)])
+//				]
+//			} else {
+//				inputAssistantItem.leadingBarButtonGroups += [
+//					UIBarButtonItemGroup(barButtonItems: [UIBarButtonItem(customView: leadingView)], representativeItem: nil)
+//				]
+//				inputAssistantItem.trailingBarButtonGroups += [
+//					UIBarButtonItemGroup(barButtonItems: [UIBarButtonItem(customView: trailingView)], representativeItem: nil)
+//				]
+//			}
+//		} else {
 			toolbars += [.primary]
-		}
+//		}
 
 		toolbar = KeyboardToolbarInputView(delegate: self,
 																			 toolbars: toolbars,
@@ -125,6 +125,8 @@ class TerminalKeyInput: TextInputBase {
 		if let passwordInputView = passwordInputView {
 			// We’ll become first responder automatically after removing the view.
 			passwordInputView.removeFromSuperview()
+            self.passwordInputView = nil
+            self.becomeFirstResponder()
 		} else {
 			passwordInputView = TerminalPasswordInputView()
 			passwordInputView!.passwordDelegate = self

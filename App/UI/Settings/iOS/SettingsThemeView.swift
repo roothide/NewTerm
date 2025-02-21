@@ -22,7 +22,7 @@ struct SettingsThemeView: View {
 
 			PreferencesList {
 				PreferencesGroup(header: Text("Built in Themes")) {
-					PreferencesPicker(selection: preferences.$themeName, label: EmptyView()) {
+					PreferencesPicker(selection: $preferences.themeName, label: EmptyView()) {
 						ForEach(sortedThemes, id: \.key) { item in Text(item.key) }
 					}
 				}

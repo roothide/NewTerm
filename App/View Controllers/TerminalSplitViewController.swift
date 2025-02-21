@@ -105,6 +105,7 @@ class TerminalSplitViewController: BaseTerminalSplitViewControllerChild {
 	}
 
 	override func viewSafeAreaInsetsDidChange() {
+        NSLog("NewTermLog: TerminalSplitViewController.viewSafeAreaInsetsDidChange view.safeAreaInsets=\(view.safeAreaInsets)")
 		super.viewSafeAreaInsetsDidChange()
 		updateConstraints()
 	}

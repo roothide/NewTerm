@@ -138,13 +138,13 @@ class TextInputBase: UIView, UIKeyInput, UITextInput, UITextInputTraits {
 
 	func characterRange(at point: CGPoint) -> UITextRange? { nil }
 
-	var autocapitalizationType = UITextAutocapitalizationType.sentences
-	var autocorrectionType = UITextAutocorrectionType.default
-	var spellCheckingType = UITextSpellCheckingType.default
-	var smartQuotesType = UITextSmartQuotesType.default
-	var smartDashesType = UITextSmartDashesType.default
-	var smartInsertDeleteType = UITextSmartInsertDeleteType.default
-	var keyboardType = UIKeyboardType.default
+	var autocapitalizationType = UITextAutocapitalizationType.none
+	var autocorrectionType = UITextAutocorrectionType.no
+	var spellCheckingType = UITextSpellCheckingType.no
+	var smartQuotesType = UITextSmartQuotesType.no
+	var smartDashesType = UITextSmartDashesType.no
+	var smartInsertDeleteType = UITextSmartInsertDeleteType.no
+	var keyboardType = UIKeyboardType.asciiCapable
 	var keyboardAppearance = UIKeyboardAppearance.default
 	var returnKeyType = UIReturnKeyType.default
 	var enablesReturnKeyAutomatically = false

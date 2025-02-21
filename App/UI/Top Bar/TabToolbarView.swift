@@ -32,25 +32,25 @@ struct TabToolbarView: View {
 	private var horizontalSizeClass
 
 	var body: some View {
-		if horizontalSizeClass == .compact {
-			VStack(spacing: 2) {
-				HStack(alignment: .center, spacing: 6) {
-					Color.clear
-						.frame(width: 3 + (Self.height + 6) * 3)
-					titleLabel
-					buttons
-				}
-					.frame(height: Self.height)
-				tabs
-					.frame(height: Self.height)
-			}
-		} else {
+//		if horizontalSizeClass == .compact {
+//			VStack(spacing: 2) {
+//				HStack(alignment: .center, spacing: 6) {
+//					Color.clear
+//						.frame(width: 3 + (Self.height + 6) * 3)
+//					titleLabel
+//					buttons
+//				}
+//					.frame(height: Self.height)
+//				tabs
+//					.frame(height: Self.height)
+//			}
+//		} else {
 			HStack(alignment: .center, spacing: 6) {
 				tabs
 				buttons
 			}
 				.frame(height: Self.height)
-		}
+//		}
 	}
 
 	private var tabs: some View {
@@ -70,7 +70,7 @@ struct TabToolbarView: View {
 	private var titleLabel: some View {
 		HStack {
 			Spacer()
-			Text(state.terminals[state.selectedIndex].title)
+            Text(state.selectedIndex<state.terminals.count ? state.terminals[state.selectedIndex].title : "")
 				.font(.system(size: 17, weight: .semibold))
 			Spacer()
 		}

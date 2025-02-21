@@ -68,7 +68,7 @@ struct SettingsView: View {
 
 			PreferencesGroup(header: Text("Keyboard"),
 											 footer: Text("Touch and hold the Space bar, then drag around the keyboard to move the cursor.")) {
-				PreferencesPicker(selection: preferences.$keyboardArrowsStyle,
+				PreferencesPicker(selection: $preferences.keyboardArrowsStyle,
 													label: Text("Arrow Keys"),
 													valueLabel: Text(preferences.keyboardArrowsStyle.name),
 													asLink: true) {
@@ -85,7 +85,7 @@ struct SettingsView: View {
 					}
 				}
 
-				PreferencesPicker(selection: preferences.$keyboardTrackpadSensitivity,
+				PreferencesPicker(selection: $preferences.keyboardTrackpadSensitivity,
 													label: Text("Trackpad Sensitivity"),
 													valueLabel: Text(preferences.keyboardTrackpadSensitivity.name),
 													asStepper: true)
@@ -93,11 +93,11 @@ struct SettingsView: View {
 
 			PreferencesGroup(header: Text("Bell"),
 											 footer: Text("When a terminal application needs to notify you of something, it rings the bell.")) {
-				Toggle("Make beep sound", isOn: preferences.$bellSound)
+				Toggle("Make beep sound", isOn: $preferences.bellSound)
 				if CHHapticEngine.capabilitiesForHardware().supportsHaptics {
-					Toggle("Make haptic vibration", isOn: preferences.$bellVibrate)
+					Toggle("Make haptic vibration", isOn: $preferences.bellVibrate)
 				}
-				Toggle("Show heads-up display", isOn: preferences.$bellHUD)
+				Toggle("Show heads-up display", isOn: $preferences.bellHUD)
 			}
 
 			PreferencesGroup {

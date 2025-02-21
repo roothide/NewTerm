@@ -11,6 +11,7 @@ import SwiftUIX
 struct KeyboardKeyButtonStyle: ButtonStyle {
 	var selected = false
 	var shadow = false
+    var minWidth: CGFloat?
 	var halfHeight = false
 	var widthRatio: CGFloat?
 
@@ -37,11 +38,11 @@ struct KeyboardKeyButtonStyle: ButtonStyle {
 		return HStack(alignment: .center, spacing: 0) {
 			configuration.label
 				.font(.system(size: fontSize, weight: .regular).monospacedDigit())
-				.padding(.horizontal, halfHeight ? 2 : 8)
+				.padding(.horizontal, isSmallDevice ? 4 : 8)
 				.padding(.vertical, halfHeight ? 0 : 6)
 				.foregroundColor(selected && !configuration.isPressed ? .black : .white)
 		}
-			.frame(minWidth: height, maxWidth: width)
+			.frame(minWidth: minWidth ?? height, maxWidth: width)
 			.frame(height: height)
 			.background(
 				backgroundColor
@@ -54,9 +55,10 @@ struct KeyboardKeyButtonStyle: ButtonStyle {
 			.animation(nil)
 	}
 
-	init(selected: Bool = false, hasShadow shadow: Bool = false, halfHeight: Bool = false, widthRatio: CGFloat? = nil) {
+    init(selected: Bool = false, hasShadow shadow: Bool = false, halfHeight: Bool = false, widthRatio: CGFloat? = nil, minWidth: CGFloat? = nil) {
 		self.selected = selected
 		self.shadow = shadow
+        self.minWidth = minWidth
 		self.halfHeight = halfHeight
 		self.widthRatio = widthRatio
 	}
@@ -64,8 +66,8 @@ struct KeyboardKeyButtonStyle: ButtonStyle {
 
 extension ButtonStyle where Self == KeyboardKeyButtonStyle {
 	/// A button style that mimicks the keys of the software keyboard.
-	static func keyboardKey(selected: Bool = false, hasShadow shadow: Bool = false, halfHeight: Bool = false, widthRatio: CGFloat? = nil) -> KeyboardKeyButtonStyle {
-		KeyboardKeyButtonStyle(selected: selected, hasShadow: shadow, halfHeight: halfHeight, widthRatio: widthRatio)
+	static func keyboardKey(selected: Bool = false, hasShadow shadow: Bool = false, halfHeight: Bool = false, widthRatio: CGFloat? = nil, minWidth: CGFloat? = nil) -> KeyboardKeyButtonStyle {
+		KeyboardKeyButtonStyle(selected: selected, hasShadow: shadow, halfHeight: halfHeight, widthRatio: widthRatio, minWidth: minWidth)
 	}
 }
 

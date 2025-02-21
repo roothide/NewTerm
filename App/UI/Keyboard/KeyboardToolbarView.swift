@@ -221,7 +221,7 @@ struct KeyboardToolbarKeyStack: View {
 			.buttonStyle(.keyboardKey(selected: state.toggledKeys.contains(key),
 																hasShadow: true,
 																halfHeight: halfHeight,
-																widthRatio: key.key.widthRatio))
+                                      widthRatio: key.key.widthRatio, minWidth: [.up, .down, .left, .right].contains(key) ? 20 : nil))
 
 		if KeyboardPreferences.isKeyRepeatEnabled {
 			button
@@ -294,7 +294,15 @@ struct KeyboardToolbarKeyStack: View {
 		}
 	}
 }
-
+struct KeyboardToolbarViewTest: View {
+    var body: some View {
+        Rectangle()
+            .fill(Color.red)
+            .frame(height: 50)
+            .opacity(0.5)
+            .padding(5)
+    }
+}
 struct KeyboardToolbarView: View {
 	weak var delegate: KeyboardToolbarViewDelegate?
 
@@ -319,34 +327,60 @@ struct KeyboardToolbarView: View {
 
 	@ViewBuilder
 	var body: some View {
-		ZStack(alignment: .bottom) {
-			Color.black
-				.frame(height: 0)
-				.captureSize(in: $outerSize)
-
+//		ZStack(alignment: .bottom) {
+//			Color.black
+//				.frame(height: 0)
+//				.captureSize(in: $outerSize)
+//                .background(GeometryReader { geometry in
+//                 Color.blue.opacity(0.5)
+//                     .onAppear {
+//                         NSLog("NewTermLog: ZStack onAppear \(geometry.size)")
+//                     }
+//                     .onChange(of: geometry.size) { newSize in
+//                         NSLog("NewTermLog: ZStack onChange \(newSize)")
+//                     }
+//                })
+            
 			VStack(spacing: 0) {
 				ForEach(toolbars, id: \.self) { toolbar in
 					if isToolbarVisible(toolbar) {
+                        let _ = NSLog("NewTermLog: outerSize=\(outerSize)")
 						let view = KeyboardToolbarKeyStack(delegate: delegate,
 																							 toolbar: toolbar)
-							.padding(.horizontal, 4)
+                            .padding(.horizontal, UIDevice.current.userInterfaceIdiom == .pad ? 4  : 1)
 							.padding(.top, 5)
 
 						switch toolbar {
 						case .primary, .padPrimaryLeading, .padPrimaryTrailing, .secondary:
 							view
-								.frame(width: outerSize.width)
+//								.frame(width: outerSize.width)
 
 						case .fnKeys:
 							CocoaScrollView(.horizontal, showsIndicators: false) {
 								view
 							}
-								.frame(width: outerSize.width)
+//								.frame(width: outerSize.width)
 						}
 					}
 				}
+                .padding(.bottom, UIDevice.current.userInterfaceIdiom == .pad ? 5 : 2)
+//                .background(GeometryReader { geometry in
+//                    Color.green.opacity(0.5)
+//                         .onAppear {
+//                             NSLog("NewTermLog: VStack onAppear \(geometry.size)")
+//                         }
+//                         .onChange(of: geometry.size) { newSize in
+//                             NSLog("NewTermLog: VStack onChange \(newSize)")
+//                         }
+//                 })
 			}
-		}
+            .onChangeOfFrame(perform: { size in
+                NSLog("NewTermLog: VStack onChangeOfFrame \(size)")
+            })
+//		}
+//        .onChangeOfFrame(perform: { size in
+//            NSLog("NewTermLog: ZStack onChangeOfFrame \(size)")
+//        })
 	}
 }
 

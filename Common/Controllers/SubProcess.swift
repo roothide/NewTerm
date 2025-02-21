@@ -72,9 +72,9 @@ class SubProcess {
 		return "/usr/bin/login"
 		#else
 		// TODO: Temporary workaround for XinaA15
-		if loginIsShell {
-			return "/var/jb/bin/zsh"
-		}
+//		if loginIsShell {
+//			return "/var/jb/bin/zsh"
+//		}
 		return [jbroot("/usr/bin/login"), "/usr/bin/login"]
 			.first { (try? URL(fileURLWithPath: $0).checkResourceIsReachable()) == true } ?? "/usr/bin/login"
 		#endif
@@ -192,7 +192,8 @@ class SubProcess {
             logger.debug("arv=\(Self.loginArgv, privacy: .public), \(Self.homeDirectory, privacy: .public), \(Self.shell, privacy: .public)" )
 		}
 		let envp = (ProcessInfo.processInfo.environment.map { "\($0)=\($1)" } + Self.baseEnvp + [
-			"LANG=\(localeCode)"
+			"LANG=\(localeCode)",
+			"PATH_LOCALE=\(jbroot("/usr/share/locale")!)"
 		]).cStringArray
 
 		defer {
@@ -291,15 +292,16 @@ class SubProcess {
 		case 0:
 			// Zero-length data is an indicator of EOF. This can happen if the user exits the terminal by
 			// typing `exit` or ^D, or if there’s a catastrophic failure (e.g. /bin/login is broken).
-            logger.debug("case 0")
+            logger.debug("case 0, pid=\(self.childPID!, privacy: .public)")
+//			sleep(9999);
 			try? stop(fromError: false)
 
 		default:
 			// Read from output and notify delegate.
 			let bytes = buffer.bindMemory(to: UTF8Char.self, capacity: bytesRead)
 			let data = Array(UnsafeBufferPointer(start: bytes, count: bytesRead))
-            let str = data.map { String($0) }.joined(separator: ", ")
-            logger.debug("output=\(str, privacy: .public)" )
+            let s = String(data: Data(data), encoding: .ascii)
+            logger.debug("NewTermLog: output=\(s!, privacy: .public)" )
 			delegate?.subProcess(didReceiveData: data)
 		}
 		buffer.deallocate()
@@ -334,7 +336,7 @@ class SubProcess {
 			if let languageCode = locale.languageCode,
 				 let regionCode = locale.regionCode {
 				let identifier = "\(languageCode)_\(regionCode).UTF-8"
-				let url = URL(fileURLWithPath: "/usr/share/locale")/identifier
+				let url = URL(fileURLWithPath: jbroot("/usr/share/locale"))/identifier
 				if (try? url.checkResourceIsReachable()) == true {
 					return identifier
 				}

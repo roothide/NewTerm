@@ -88,8 +88,13 @@ struct TerminalSampleView: View {
 
 	init(fontMetrics: FontMetrics = FontMetrics(font: AppFont(), fontSize: 12),
 			 colorMap: ColorMap = ColorMap(theme: AppTheme())) {
+        NSLog("NewTermLog: TerminalSampleView.init \(fontMetrics) \(colorMap)")
 		self.fontMetrics = fontMetrics
 		self.colorMap = colorMap
+        state.colorMap = colorMap
+        state.fontMetrics = fontMetrics
+        stringSupplier.colorMap = colorMap
+        stringSupplier.fontMetrics = fontMetrics
 
 		let options = TerminalOptions(cols: 80,
 																	rows: 25,
@@ -106,12 +111,14 @@ struct TerminalSampleView: View {
 	var body: some View {
 		TerminalView()
 			.environmentObject(state)
-			.onAppear {
-				stringSupplier.colorMap = colorMap
-				stringSupplier.fontMetrics = fontMetrics
-			}
-			.onChange(of: colorMap, perform: { stringSupplier.colorMap = $0 })
-			.onChange(of: fontMetrics, perform: { stringSupplier.fontMetrics = $0 })
+            .onChange(of: colorMap, perform: {
+                NSLog("NewTermLog: new colorMap=\($0)")
+                state.colorMap = colorMap
+                stringSupplier.colorMap = $0 })
+			.onChange(of: fontMetrics, perform: {
+                NSLog("NewTermLog: new fontMetrics=\($0)")
+                state.fontMetrics = fontMetrics
+                stringSupplier.fontMetrics = $0 })
 			.onChangeOfFrame(perform: { size in
 				// Determine the screen size based on the font size
 				// TODO: Calculate the exact number of lines we need from the buffer
@@ -120,6 +127,7 @@ struct TerminalSampleView: View {
 												rows: 32)
 			})
 			.onReceive(timer) { _ in
+                NSLog("NewTermLog: state.lines.count=\(state.lines.count)")
 				state.lines = Array(0...(terminal.rows + terminal.getTopVisibleRow()))
 					.map { stringSupplier.attributedString(forScrollInvariantRow: $0) }
 			}

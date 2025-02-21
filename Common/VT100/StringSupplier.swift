@@ -29,9 +29,11 @@ open class StringSupplier {
 			fatalError()
 		}
 
-		guard let line = terminal.getScrollInvariantLine(row: row) else {
-			return AnyView(EmptyView())
-		}
+//		guard let line = terminal.getScrollInvariantLine(row: row) else {
+//			return AnyView(EmptyView())
+//		}
+        let line = terminal.buffer.lines[row]
+//        NSLog("NewTermLog: line[\(row)]=\(line)")
 
 		let cursorPosition = terminal.getCursorLocation()
 		let scrollbackRows = terminal.getTopVisibleRow()

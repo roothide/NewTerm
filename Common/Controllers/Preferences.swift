@@ -32,6 +32,10 @@ public enum PreferencesSyncService: Int, Identifiable {
 public class Preferences: NSObject, ObservableObject {
 
 	public static let didChangeNotification = Notification.Name(rawValue: "NewTermPreferencesDidChangeNotification")
+    
+    private func onChanged() {
+        NotificationCenter.default.post(name: Preferences.didChangeNotification, object: nil)
+    }
 
 	public static let shared = Preferences()
 
@@ -53,33 +57,24 @@ public class Preferences: NSObject, ObservableObject {
 		colorMapChanged()
 	}
 
-	@AppStorage("fontName")
-	public var fontName: String = "SF Mono" {
-		willSet { objectWillChange.send() }
-		didSet { fontMetricsChanged() }
+	@AppStorage("fontName") private var _fontName: String = "SF Mono"
+	public var fontName: String {
+        get { return _fontName }
+        set { objectWillChange.send(); _fontName=newValue; fontMetricsChanged(); onChanged() }
 	}
 
 	// TODO: Public just for testing, make it private later
 	@AppStorage("fontSizePhone")
-	public var fontSizePhone: Double = 12 {
-		willSet { objectWillChange.send() }
-		didSet { fontMetricsChanged() }
-	}
+	private var fontSizePhone: Double = 12
 
 	@AppStorage("fontSizePad")
-	private var fontSizePad: Double = 13 {
-		willSet { objectWillChange.send() }
-		didSet { fontMetricsChanged() }
-	}
+	private var fontSizePad: Double = 13
 
 	@AppStorage("fontSizeMac")
-	public var fontSizeMac: Double = 13 {
-		willSet { objectWillChange.send() }
-		didSet { fontMetricsChanged() }
-	}
+    private var fontSizeMac: Double = 13
 
 	// TODO: Make this act like a DynamicProperty
-	public var fontSize: Double {
+    public var fontSize: Double {
 		get {
 			#if targetEnvironment(macCatalyst)
 			return fontSizeMac
@@ -88,6 +83,7 @@ public class Preferences: NSObject, ObservableObject {
 			#endif
 		}
 		set {
+            objectWillChange.send();
 			#if targetEnvironment(macCatalyst)
 			fontSizeMac = newValue
 			#else
@@ -97,78 +93,93 @@ public class Preferences: NSObject, ObservableObject {
 				fontSizePhone = newValue
 			}
 			#endif
+            fontMetricsChanged()
+            onChanged()
 		}
 	}
 
-	@AppStorage("themeName")
-	public var themeName: String = "Basic (Dark)" {
-		willSet { objectWillChange.send() }
-		didSet { colorMapChanged() }
+	@AppStorage("themeName") private var _themeName: String = "Basic (Dark)"
+	public var themeName: String {
+		get { return _themeName }
+        set { objectWillChange.send(); _themeName=newValue; colorMapChanged(); onChanged() }
 	}
 
-	@AppStorage("keyboardAccessoryStyle")
-	public var keyboardAccessoryStyle: KeyboardButtonStyle = .text {
-		willSet { objectWillChange.send() }
+	@AppStorage("keyboardAccessoryStyle") private var _keyboardAccessoryStyle: KeyboardButtonStyle = .text
+	public var keyboardAccessoryStyle: KeyboardButtonStyle {
+        get { return _keyboardAccessoryStyle }
+        set { objectWillChange.send(); _keyboardAccessoryStyle=newValue; onChanged() }
 	}
 
-	@AppStorage("keyboardTrackpadSensitivity")
-	public var keyboardTrackpadSensitivity: KeyboardTrackpadSensitivity = .medium {
-		willSet { objectWillChange.send() }
+	@AppStorage("keyboardTrackpadSensitivity") private var _keyboardTrackpadSensitivity: KeyboardTrackpadSensitivity = .medium
+	public var keyboardTrackpadSensitivity: KeyboardTrackpadSensitivity {
+        get { return _keyboardTrackpadSensitivity }
+        set { objectWillChange.send(); _keyboardTrackpadSensitivity=newValue; onChanged() }
+    }
+
+    @AppStorage("keyboardArrowsStyle") private var _keyboardArrowsStyle: KeyboardArrowsStyle = isBigDevice ? .classic : (isSmallDevice ? .scissor : .butterfly)
+	public var keyboardArrowsStyle: KeyboardArrowsStyle {
+        get { return _keyboardArrowsStyle }
+        set { objectWillChange.send(); _keyboardArrowsStyle=newValue; onChanged() }
 	}
 
-	@AppStorage("keyboardArrowsStyle")
-	public var keyboardArrowsStyle: KeyboardArrowsStyle = .butterfly {
-		willSet { objectWillChange.send() }
+	@AppStorage("bellHUD") private var _bellHUD: Bool = true
+	public var bellHUD: Bool {
+        get { return _bellHUD }
+        set { objectWillChange.send(); _bellHUD=newValue; onChanged() }
+    }
+
+	@AppStorage("bellVibrate") private var _bellVibrate: Bool = true
+	public var bellVibrate: Bool {
+        get { return _bellVibrate }
+        set { objectWillChange.send(); _bellVibrate=newValue; onChanged() }
+    }
+
+	@AppStorage("bellSound") private var _bellSound: Bool = true
+	public var bellSound: Bool {
+        get { return _bellSound }
+        set { objectWillChange.send(); _bellSound=newValue; onChanged() }
 	}
 
-	@AppStorage("bellHUD")
-	public var bellHUD: Bool = true {
-		willSet { objectWillChange.send() }
+	@AppStorage("refreshRateOnAC") private var _refreshRateOnAC: Int = 60
+	public var refreshRateOnAC: Int {
+        get { return _refreshRateOnAC }
+        set { objectWillChange.send(); _refreshRateOnAC=newValue; onChanged() }
 	}
 
-	@AppStorage("bellVibrate")
-	public var bellVibrate: Bool = true {
-		willSet { objectWillChange.send() }
+	@AppStorage("refreshRateOnBattery") var _refreshRateOnBattery: Int = 60
+	public var refreshRateOnBattery: Int {
+        get { return _refreshRateOnBattery }
+        set { objectWillChange.send(); _refreshRateOnBattery=newValue; onChanged() }
 	}
 
-	@AppStorage("bellSound")
-	public var bellSound: Bool = true {
-		willSet { objectWillChange.send() }
+	@AppStorage("reduceRefreshRateInLPM") private var _reduceRefreshRateInLPM: Bool = true
+	public var reduceRefreshRateInLPM: Bool {
+        get { return _reduceRefreshRateInLPM }
+        set { objectWillChange.send(); _reduceRefreshRateInLPM=newValue; onChanged() }
 	}
 
-	@AppStorage("refreshRateOnAC")
-	public var refreshRateOnAC: Int = 60 {
-		willSet { objectWillChange.send() }
+	@AppStorage("preferencesSyncService") private var _preferencesSyncService: PreferencesSyncService = .icloud
+	public var preferencesSyncService: PreferencesSyncService {
+        get { return _preferencesSyncService }
+        set { objectWillChange.send(); _preferencesSyncService=newValue; onChanged() }
 	}
 
-	@AppStorage("refreshRateOnBattery")
-	public var refreshRateOnBattery: Int = 60 {
-		willSet { objectWillChange.send() }
+	@AppStorage("preferencesSyncPath") private var _preferencesSyncPath: String = ""
+	public var preferencesSyncPath: String {
+        get { return _preferencesSyncPath }
+        set { objectWillChange.send(); _preferencesSyncPath=newValue; onChanged() }
 	}
 
-	@AppStorage("reduceRefreshRateInLPM")
-	public var reduceRefreshRateInLPM: Bool = true {
-		willSet { objectWillChange.send() }
+	@AppStorage("preferredLocale") private var _preferredLocale: String = ""
+	public var preferredLocale: String {
+        get { return _preferredLocale }
+        set { objectWillChange.send(); _preferredLocale=newValue; onChanged() }
 	}
 
-	@AppStorage("preferencesSyncService")
-	public var preferencesSyncService: PreferencesSyncService = .icloud {
-		willSet { objectWillChange.send() }
-	}
-
-	@AppStorage("preferencesSyncPath")
-	public var preferencesSyncPath: String = "" {
-		willSet { objectWillChange.send() }
-	}
-
-	@AppStorage("preferredLocale")
-	public var preferredLocale: String = "" {
-		willSet { objectWillChange.send() }
-	}
-
-	@AppStorage("lastVersion")
-	public var lastVersion: Int = 0 {
-		willSet { objectWillChange.send() }
+	@AppStorage("lastVersion") private var _lastVersion: Int = 0
+	public var lastVersion: Int {
+        get { return _lastVersion }
+        set { objectWillChange.send(); _lastVersion=newValue; onChanged() }
 	}
 
 	public var userInterfaceStyle: UIUserInterfaceStyle { colorMap.userInterfaceStyle }
@@ -177,14 +188,14 @@ public class Preferences: NSObject, ObservableObject {
 
 	private func fontMetricsChanged() {
 		let font = AppFont.predefined[fontName] ?? AppFont()
-		objectWillChange.send()
 		fontMetrics = FontMetrics(font: font, fontSize: CGFloat(fontSize))
+        NSLog("NewTermLog: fontMetricsChanged -> size=\(fontSize) name=\(fontName) : \(AppFont.predefined[fontName])")
 	}
 
 	private func colorMapChanged() {
 		let theme = AppTheme.predefined[themeName] ?? AppTheme()
-		objectWillChange.send()
 		colorMap = ColorMap(theme: theme)
+        NSLog("NewTermLog: colorMapChanged -> \(colorMap)")
 	}
 
 }

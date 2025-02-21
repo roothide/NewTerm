@@ -102,8 +102,9 @@ class RootViewController: UIViewController {
 
 		// TODO: Cleanup
 		#if !targetEnvironment(macCatalyst)
-		let isWide = isBigDevice || view.frame.size.width > 450
+		let isWide = true //isBigDevice || view.frame.size.width > 450
 		let topBarHeight: CGFloat = isWide ? 33 : 66
+        NSLog("NewTermLog: topBarHeight=\(topBarHeight) view.safeAreaInsets=\(view.safeAreaInsets) view.frame=\(view.frame)")
 		tabToolbar?.view.frame = CGRect(x: 0, y: 0, width: view.frame.size.width, height: view.safeAreaInsets.top + topBarHeight)
 
 		for viewController in terminals {
@@ -111,6 +112,11 @@ class RootViewController: UIViewController {
 		}
 		#endif
 	}
+    
+    override func viewSafeAreaInsetsDidChange() {
+        NSLog("NewTermLog: RootViewController.viewSafeAreaInsetsDidChange view.safeAreaInsets=\(view.safeAreaInsets)")
+        super.viewSafeAreaInsetsDidChange()
+    }
 
 	// MARK: - Preferences
 
