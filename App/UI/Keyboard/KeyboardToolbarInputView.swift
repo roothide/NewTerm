@@ -12,9 +12,11 @@ import SwiftUIX
 class KeyboardToolbarInputView: UIInputView {
 
 	private var hostingView: UIHostingView<AnyView>!
+    private var delegate: KeyboardToolbarViewDelegate!
 
 	init(delegate: KeyboardToolbarViewDelegate?, toolbars: [Toolbar], state: KeyboardToolbarViewState) {
 		super.init(frame: .zero, inputViewStyle: .keyboard)
+        self.delegate = delegate
         
         setContentHuggingPriority(.fittingSizeLevel, for: .vertical)
         setContentCompressionResistancePriority(.fittingSizeLevel, for: .vertical)
@@ -44,7 +46,8 @@ class KeyboardToolbarInputView: UIInputView {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        NSLog("NewTermLog: layoutSubviews frame=\(self.frame) safeArea=\(self.safeAreaInsets) hostview=\(hostingView.frame) hvcview=\(hostingView.get_rootViewHostingController?.view.frame) safeArea=\(hostingView.get_rootViewHostingController?.view.safeAreaInsets)")
+        delegate?.keyboardToolbarDidChangeHeight(height: self.frame.size.height)
+        NSLog("NewTermLog: KeyboardToolbarInputView.layoutSubviews frame=\(self.frame) safeArea=\(self.safeAreaInsets)\n\nhostview=\(hostingView.frame) hvcview=\(hostingView.get_rootViewHostingController?.view.frame) safeArea=\(hostingView.get_rootViewHostingController?.view.safeAreaInsets)")
     }
 
 	required init?(coder: NSCoder) {

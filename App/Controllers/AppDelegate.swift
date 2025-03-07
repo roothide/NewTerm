@@ -15,7 +15,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	private lazy var app = UIApplication.shared
 
 	func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
-		UIScrollView.appearance().keyboardDismissMode = .interactive
+		UIScrollView.appearance().keyboardDismissMode = .interactiveWithAccessory //only works on ios15
 
 		FontMetrics.loadFonts()
 		_ = Preferences.shared
@@ -107,10 +107,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			builder.replace(menu: .newScene,
 											with: UIMenu(options: .displayInline,
 																	 children: [
-																		UIKeyCommand(title: .localize("NEW_WINDOW", comment: "VoiceOver label for the new window button."),
-																								 action: #selector(RootViewController.addWindow),
-																								 input: "n",
-																								 modifierFlags: .command),
+//																		UIKeyCommand(title: .localize("NEW_WINDOW", comment: "VoiceOver label for the new window button."),
+//																								 action: #selector(RootViewController.addWindow),
+//																								 input: "n",
+//																								 modifierFlags: .command),
 																		UIKeyCommand(title: .localize("NEW_TAB", comment: "VoiceOver label for the new tab button."),
 																								 action: #selector(RootViewController.newTab),
 																								 input: "t",
@@ -132,18 +132,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 																								 modifierFlags: .command)
 																	 ]))
 
-			builder.insertChild(UIMenu(options: .displayInline,
-																 children: [
-																	UIKeyCommand(title: .localize("SPLIT_HORIZONTALLY"),
-																							 action: #selector(RootViewController.splitHorizontally),
-																							 input: "d",
-																							 modifierFlags: [.command, .shift]),
-																	UIKeyCommand(title: .localize("SPLIT_VERTICALLY"),
-																							 action: #selector(RootViewController.splitVertically),
-																							 input: "d",
-																							 modifierFlags: .command)
-																 ]),
-													atEndOfMenu: .file)
+//			builder.insertChild(UIMenu(options: .displayInline,
+//																 children: [
+//																	UIKeyCommand(title: .localize("SPLIT_HORIZONTALLY"),
+//																							 action: #selector(RootViewController.splitHorizontally),
+//																							 input: "d",
+//																							 modifierFlags: [.command, .shift]),
+//																	UIKeyCommand(title: .localize("SPLIT_VERTICALLY"),
+//																							 action: #selector(RootViewController.splitVertically),
+//																							 input: "d",
+//																							 modifierFlags: .command)
+//																 ]),
+//													atEndOfMenu: .file)
 
 			// Edit menu
 			builder.insertSibling(UIMenu(options: .displayInline,

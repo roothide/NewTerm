@@ -23,7 +23,8 @@ extension ToolbarKey {
 		case .end:      return EscapeSequences.end
 		case .pageUp:   return EscapeSequences.pageUp
 		case .pageDown: return EscapeSequences.pageDown
-		case .delete:   return EscapeSequences.delete
+        case .delete:   return EscapeSequences.delete
+        case .Delete:   return EscapeSequences.Delete
 		case .fnKey(let index): return EscapeSequences.fn[index - 1]
 		case .fixedSpace, .variableSpace, .arrows,
 				 .control, .more, .fnKeys:
@@ -48,6 +49,7 @@ extension ToolbarKey {
 
 class TerminalKeyInput: TextInputBase {
 
+    var keyboardToolbarHeightChanged: ((Double) -> Void)?
 	weak var terminalInputDelegate: TerminalInputProtocol?
 	weak var textView: UIView! {
 		didSet {
@@ -221,6 +223,9 @@ class TerminalKeyInput: TextInputBase {
 		case #selector(self.paste(_:)):
 			// Only paste if the pasteboard contains a plaintext type
 			return UIPasteboard.general.hasStrings || UIPasteboard.general.hasURLs
+            
+        case #selector(self.copy(_:)):
+            return true
 
 		case #selector(self.cut(_:)):
 			// Ensure cut is never allowed
@@ -232,7 +237,9 @@ class TerminalKeyInput: TextInputBase {
 	}
 
 	override func copy(_ sender: Any?) {
-//		textView?.copy(sender)
+        if let text = terminalInputDelegate!.getAllText() {
+            UIPasteboard.general.string = text
+        }
 	}
 
 	override func paste(_ sender: Any?) {
@@ -307,10 +314,10 @@ class TerminalKeyInput: TextInputBase {
 			keyData = keyData.map(\.controlCharacter)
 		}
 
-		// Prepend esc before each byte if meta key is down.
-		if key.modifierFlags.contains(.alternate) {
-			keyData = keyData.reduce([], { result, character in result + EscapeSequences.meta + [character] })
-		}
+//		// Prepend esc before each byte if meta key is down.
+//		if key.modifierFlags.contains(.alternate) {
+//			keyData = keyData.reduce([], { result, character in result + EscapeSequences.meta + [character] })
+//		}
 
 		terminalInputDelegate?.receiveKeyboardInput(data: keyData)
 		return true
@@ -322,13 +329,15 @@ class TerminalKeyInput: TextInputBase {
 			if let key = press.key,
 				 handleKey(key) {
 				isHandled = true
-				pressedHardwareKeys.insert(key)
-			}
+				pressedHardwareKeys = [key] //only repeat the pressed key
+            }
 		}
-
+// sometimes ios dose not send the end key event, so we only allow it on simultor for testing
+#if targetEnvironment(simulator)
 		if !pressedHardwareKeys.isEmpty {
 			beginKeyRepeat()
 		}
+#endif
 
 		if !isHandled {
 			super.pressesBegan(presses, with: event)
@@ -336,6 +345,10 @@ class TerminalKeyInput: TextInputBase {
 	}
 
 	private func handlePressesEnded(_ presses: Set<UIPress>) {
+        if repeatTimer != nil {
+            repeatTimer?.invalidate()
+            repeatTimer = nil
+        }
 		for press in presses {
 			if let key = press.key {
 				pressedHardwareKeys.remove(key)
@@ -355,7 +368,8 @@ class TerminalKeyInput: TextInputBase {
 
 	private func beginKeyRepeat() {
 		if repeatTimer != nil {
-			return
+            repeatTimer?.invalidate()
+            repeatTimer = nil
 		}
 
 		if KeyboardPreferences.isKeyRepeatEnabled {
@@ -394,13 +408,21 @@ class TerminalKeyInput: TextInputBase {
 }
 
 extension TerminalKeyInput: KeyboardToolbarViewDelegate {
+    func keyboardToolbarDidChangeHeight(height: Double) {
+        self.keyboardToolbarHeightChanged?(height)
+    }
+    
 	func keyboardToolbarDidPressKey(_ key: ToolbarKey) {
 		guard let terminalInputDelegate = terminalInputDelegate else {
 			return
 		}
 
 		terminalInputDelegate.receiveKeyboardInput(data: key.keySequence(applicationCursor: terminalInputDelegate.applicationCursor))
-
+        
+        if key != .control && state.toggledKeys.contains(.control) {
+            state.toggledKeys.remove(.control)
+        }
+        
 		switch key {
 		case .more:
 			// Also hide fn row if currently toggled
@@ -417,7 +439,7 @@ extension TerminalKeyInput: KeyboardToolbarViewDelegate {
 		case .up, .down, .left, .right,
 				 .home, .end, .pageUp, .pageDown,
 				 .delete:
-			pressedToolbarKeys.insert(key)
+			pressedToolbarKeys = [key] //only repeat the pressed key
 			beginKeyRepeat()
 
 		default: break

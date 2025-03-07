@@ -12,5 +12,7 @@ public protocol TerminalInputProtocol: AnyObject {
 	func receiveKeyboardInput(data: [UTF8Char])
 
 	var applicationCursor: Bool { get }
+    
+    func getAllText() -> String?
 
 }

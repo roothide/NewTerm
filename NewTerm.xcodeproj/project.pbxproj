@@ -29,7 +29,6 @@
 		4E460121261EC8C0004DBCC2 /* UpdateCheckManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E460120261EC8C0004DBCC2 /* UpdateCheckManager.swift */; };
 		4E460129261FF23F004DBCC2 /* SettingsSceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E460128261FF23F004DBCC2 /* SettingsSceneDelegate.swift */; };
 		4E479710262D44D8003CF48C /* Localizable.stringsdict in Resources */ = {isa = PBXBuildFile; fileRef = 4E479713262D44D8003CF48C /* Localizable.stringsdict */; };
-		4E4CB12027E9B33C001F07B6 /* SwiftUIX in Frameworks */ = {isa = PBXBuildFile; productRef = 4E4CB11F27E9B33C001F07B6 /* SwiftUIX */; };
 		4E57499826FEE90700D94DF5 /* PreferencesGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E57499726FEE90700D94DF5 /* PreferencesGroup.swift */; };
 		4E57499A26FEED9800D94DF5 /* PreferencesList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E57499926FEED9800D94DF5 /* PreferencesList.swift */; };
 		4E5E817526F2EBE000C4DB6D /* SettingsPerformanceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E5E817426F2EBE000C4DB6D /* SettingsPerformanceView.swift */; };
@@ -43,7 +42,6 @@
 		4E980833261ACA0400E41883 /* AppTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E980831261AC9FA00E41883 /* AppTheme.swift */; };
 		4E9B32E0260C66B5006A1FBC /* Bundle+NewTermAdditions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E9B32DF260C66B5006A1FBC /* Bundle+NewTermAdditions.swift */; };
 		4E9B32EB261DCFC4006A1FBC /* TextInputBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E9B32EA261DCFC4006A1FBC /* TextInputBase.swift */; };
-		4E9FB96C26171A01005AFCC8 /* SwiftTerm in Frameworks */ = {isa = PBXBuildFile; productRef = 4E9FB96B26171A01005AFCC8 /* SwiftTerm */; };
 		4E9FB97226172079005AFCC8 /* Color+Additions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E9FB97126172079005AFCC8 /* Color+Additions.swift */; };
 		4E9FB97526172293005AFCC8 /* StringSupplier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E9FB97426172293005AFCC8 /* StringSupplier.swift */; };
 		4E9FB978261724FA005AFCC8 /* ColorMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E9FB977261724FA005AFCC8 /* ColorMap.swift */; };
@@ -67,10 +65,17 @@
 		4ED1273125F9E8F60049F59B /* UIColor+AppColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ED1273025F9E8F60049F59B /* UIColor+AppColors.swift */; };
 		4EDC998E26F4401B0030C1F9 /* SettingsInterfaceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EDC998D26F4401B0030C1F9 /* SettingsInterfaceView.swift */; };
 		4EECEADF289A90D300AA919B /* TabToolbarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EECEADE289A90D300AA919B /* TabToolbarView.swift */; };
-		8406F25C2A51F0D5006DC43A /* libiosexec.1.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 8406F25A2A51F0D4006DC43A /* libiosexec.1.tbd */; platformFilter = ios; settings = {ATTRIBUTES = (Required, ); }; };
+		8406F25C2A51F0D5006DC43A /* libiosexec.1.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 8406F25A2A51F0D4006DC43A /* libiosexec.1.tbd */; platformFilter = ios; settings = {ATTRIBUTES = (Weak, ); }; };
 		8406F25D2A51F0DB006DC43A /* libiosexec.1.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 8406F25A2A51F0D4006DC43A /* libiosexec.1.tbd */; };
-		842F23E82AA3236A00EE2E9A /* libroothide.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 842F23E72AA3236A00EE2E9A /* libroothide.tbd */; };
+		842552FF2D72428C005A31C0 /* SwiftTerm in Frameworks */ = {isa = PBXBuildFile; productRef = 842552FE2D72428C005A31C0 /* SwiftTerm */; };
+		842F23E82AA3236A00EE2E9A /* libroothide.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 842F23E72AA3236A00EE2E9A /* libroothide.tbd */; platformFilter = ios; settings = {ATTRIBUTES = (Weak, ); }; };
 		842F23EC2AA3239800EE2E9A /* roothide.h in Headers */ = {isa = PBXBuildFile; fileRef = 842F23EB2AA3239800EE2E9A /* roothide.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		846EAB402D7240B2005DFF21 /* SwiftUIX in Resources */ = {isa = PBXBuildFile; fileRef = 846EAB3E2D7240B2005DFF21 /* SwiftUIX */; };
+		846EAB412D7240B2005DFF21 /* SwiftUIX in Resources */ = {isa = PBXBuildFile; fileRef = 846EAB3E2D7240B2005DFF21 /* SwiftUIX */; };
+		846EAB422D7240B2005DFF21 /* SwiftTerm in Resources */ = {isa = PBXBuildFile; fileRef = 846EAB3F2D7240B2005DFF21 /* SwiftTerm */; };
+		846EAB432D7240B2005DFF21 /* SwiftTerm in Resources */ = {isa = PBXBuildFile; fileRef = 846EAB3F2D7240B2005DFF21 /* SwiftTerm */; };
+		846EAB452D72414F005DFF21 /* SwiftTerm in Frameworks */ = {isa = PBXBuildFile; productRef = 846EAB442D72414F005DFF21 /* SwiftTerm */; };
+		846EAB472D72414F005DFF21 /* SwiftUIX in Frameworks */ = {isa = PBXBuildFile; productRef = 846EAB462D72414F005DFF21 /* SwiftUIX */; };
 		CF6B3BAA244C4538000A608B /* LogoHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF6B3BA9244C4537000A608B /* LogoHeaderView.swift */; };
 		CF71BC9322BB6DEA00AFB1E1 /* NewTermCommon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CF71BC8422BB6DBA00AFB1E1 /* NewTermCommon.framework */; };
 		CF71BC9722BB6E0300AFB1E1 /* Preferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFBB96C322B5481B00585BE6 /* Preferences.swift */; };
@@ -215,6 +220,8 @@
 		842F23E72AA3236A00EE2E9A /* libroothide.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; path = libroothide.tbd; sourceTree = "<group>"; };
 		842F23E92AA3237900EE2E9A /* libiosexec.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = libiosexec.h; sourceTree = "<group>"; };
 		842F23EB2AA3239800EE2E9A /* roothide.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = roothide.h; sourceTree = "<group>"; };
+		846EAB3E2D7240B2005DFF21 /* SwiftUIX */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = SwiftUIX; sourceTree = "<group>"; };
+		846EAB3F2D7240B2005DFF21 /* SwiftTerm */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = SwiftTerm; sourceTree = "<group>"; };
 		CF22F9B31FFB97F7003175DE /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		CF6B3BA9244C4537000A608B /* LogoHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogoHeaderView.swift; sourceTree = "<group>"; };
 		CF71BC5F22BB657500AFB1E1 /* PrefixHeader.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PrefixHeader.pch; sourceTree = "<group>"; };
@@ -262,9 +269,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4E9FB96C26171A01005AFCC8 /* SwiftTerm in Frameworks */,
 				8406F25D2A51F0DB006DC43A /* libiosexec.1.tbd in Frameworks */,
 				CF71BCC322BB727B00AFB1E1 /* libcurses.tbd in Frameworks */,
+				842552FF2D72428C005A31C0 /* SwiftTerm in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -274,8 +281,9 @@
 			files = (
 				842F23E82AA3236A00EE2E9A /* libroothide.tbd in Frameworks */,
 				8406F25C2A51F0D5006DC43A /* libiosexec.1.tbd in Frameworks */,
+				846EAB452D72414F005DFF21 /* SwiftTerm in Frameworks */,
+				846EAB472D72414F005DFF21 /* SwiftUIX in Frameworks */,
 				CF71BC9322BB6DEA00AFB1E1 /* NewTermCommon.framework in Frameworks */,
-				4E4CB12027E9B33C001F07B6 /* SwiftUIX in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -335,6 +343,15 @@
 			path = iOS;
 			sourceTree = "<group>";
 		};
+		846EAB3D2D7240B2005DFF21 /* Deps */ = {
+			isa = PBXGroup;
+			children = (
+				846EAB3E2D7240B2005DFF21 /* SwiftUIX */,
+				846EAB3F2D7240B2005DFF21 /* SwiftTerm */,
+			);
+			path = Deps;
+			sourceTree = "<group>";
+		};
 		CF22F9A81FFB97F7003175DE = {
 			isa = PBXGroup;
 			children = (
@@ -342,6 +359,7 @@
 				842F23E92AA3237900EE2E9A /* libiosexec.h */,
 				8406F25A2A51F0D4006DC43A /* libiosexec.1.tbd */,
 				CF22F9B31FFB97F7003175DE /* README.md */,
+				846EAB3D2D7240B2005DFF21 /* Deps */,
 				CFBB967622B5481A00585BE6 /* App */,
 				CF71BC3622BB626700AFB1E1 /* Common */,
 				CFBB96EF22B548D700585BE6 /* Resources */,
@@ -611,7 +629,7 @@
 			);
 			name = "NewTerm Common";
 			packageProductDependencies = (
-				4E9FB96B26171A01005AFCC8 /* SwiftTerm */,
+				842552FE2D72428C005A31C0 /* SwiftTerm */,
 			);
 			productName = "NewTerm Common";
 			productReference = CF71BC8422BB6DBA00AFB1E1 /* NewTermCommon.framework */;
@@ -636,7 +654,8 @@
 			);
 			name = "NewTerm (iOS)";
 			packageProductDependencies = (
-				4E4CB11F27E9B33C001F07B6 /* SwiftUIX */,
+				846EAB442D72414F005DFF21 /* SwiftTerm */,
+				846EAB462D72414F005DFF21 /* SwiftUIX */,
 			);
 			productName = "NewTerm (macOS)";
 			productReference = CFBB966122B546DA00585BE6 /* NewTerm.app */;
@@ -675,8 +694,6 @@
 			);
 			mainGroup = CF22F9A81FFB97F7003175DE;
 			packageReferences = (
-				4E9FB96A26171A01005AFCC8 /* XCRemoteSwiftPackageReference "SwiftTerm" */,
-				4E4CB11D27E9B2DB001F07B6 /* XCRemoteSwiftPackageReference "SwiftUIX" */,
 			);
 			productRefGroup = CF22F9A81FFB97F7003175DE;
 			projectDirPath = "";
@@ -694,6 +711,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				846EAB432D7240B2005DFF21 /* SwiftTerm in Resources */,
+				846EAB412D7240B2005DFF21 /* SwiftUIX in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -701,9 +720,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				846EAB422D7240B2005DFF21 /* SwiftTerm in Resources */,
 				CFBB973222B548D700585BE6 /* Fonts.plist in Resources */,
 				CFBB973122B548D700585BE6 /* colortest.txt in Resources */,
 				4E479710262D44D8003CF48C /* Localizable.stringsdict in Resources */,
+				846EAB402D7240B2005DFF21 /* SwiftUIX in Resources */,
 				CFBB975A22B5499600585BE6 /* Assets.xcassets in Resources */,
 				CFBB972622B548D700585BE6 /* InfoPlist.strings in Resources */,
 				CFBB972522B548D700585BE6 /* Localizable.strings in Resources */,
@@ -976,7 +997,7 @@
 					Common/External,
 					Common/External/ncurses,
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				"IPHONEOS_DEPLOYMENT_TARGET[sdk=macosx*]" = 14.2;
 				LIBRARY_SEARCH_PATHS = Common/External;
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
@@ -1021,7 +1042,7 @@
 					Common/External,
 					Common/External/ncurses,
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				"IPHONEOS_DEPLOYMENT_TARGET[sdk=macosx*]" = 14.2;
 				LIBRARY_SEARCH_PATHS = Common/External;
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
@@ -1036,6 +1057,7 @@
 			buildSettings = {
 				ALLOW_TARGET_PLATFORM_SPECIALIZATION = YES;
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD)";
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = NO;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
@@ -1107,6 +1129,7 @@
 			buildSettings = {
 				ALLOW_TARGET_PLATFORM_SPECIALIZATION = YES;
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD)";
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = NO;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
@@ -1396,35 +1419,18 @@
 		};
 /* End XCConfigurationList section */
 
-/* Begin XCRemoteSwiftPackageReference section */
-		4E4CB11D27E9B2DB001F07B6 /* XCRemoteSwiftPackageReference "SwiftUIX" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/SwiftUIX/SwiftUIX";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 0.1.2;
-			};
-		};
-		4E9FB96A26171A01005AFCC8 /* XCRemoteSwiftPackageReference "SwiftTerm" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/migueldeicaza/SwiftTerm.git";
-			requirement = {
-				branch = main;
-				kind = branch;
-			};
-		};
-/* End XCRemoteSwiftPackageReference section */
-
 /* Begin XCSwiftPackageProductDependency section */
-		4E4CB11F27E9B33C001F07B6 /* SwiftUIX */ = {
+		842552FE2D72428C005A31C0 /* SwiftTerm */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 4E4CB11D27E9B2DB001F07B6 /* XCRemoteSwiftPackageReference "SwiftUIX" */;
-			productName = SwiftUIX;
-		};
-		4E9FB96B26171A01005AFCC8 /* SwiftTerm */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 4E9FB96A26171A01005AFCC8 /* XCRemoteSwiftPackageReference "SwiftTerm" */;
 			productName = SwiftTerm;
+		};
+		846EAB442D72414F005DFF21 /* SwiftTerm */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = SwiftTerm;
+		};
+		846EAB462D72414F005DFF21 /* SwiftUIX */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = SwiftUIX;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

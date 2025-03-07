@@ -32,25 +32,25 @@ struct TabToolbarView: View {
 	private var horizontalSizeClass
 
 	var body: some View {
-//		if horizontalSizeClass == .compact {
-//			VStack(spacing: 2) {
-//				HStack(alignment: .center, spacing: 6) {
-//					Color.clear
-//						.frame(width: 3 + (Self.height + 6) * 3)
-//					titleLabel
-//					buttons
-//				}
-//					.frame(height: Self.height)
-//				tabs
-//					.frame(height: Self.height)
-//			}
-//		} else {
+		if UIDevice.current.userInterfaceIdiom == .pad {
+			VStack(spacing: 2) {
+				HStack(alignment: .center, spacing: 6) {
+					Color.clear
+						.frame(width: 3 + (Self.height + 6) * 3)
+					titleLabel
+					buttons
+				}
+					.frame(height: Self.height)
+				tabs
+					.frame(height: Self.height)
+			}
+		} else {
 			HStack(alignment: .center, spacing: 6) {
 				tabs
 				buttons
 			}
 				.frame(height: Self.height)
-//		}
+		}
 	}
 
 	private var tabs: some View {

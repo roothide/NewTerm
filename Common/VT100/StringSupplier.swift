@@ -24,26 +24,30 @@ open class StringSupplier {
 
 	public init() {}
 
-	public func attributedString(forScrollInvariantRow row: Int) -> AnyView {
-		guard let terminal = terminal else {
-			fatalError()
-		}
-
-//		guard let line = terminal.getScrollInvariantLine(row: row) else {
-//			return AnyView(EmptyView())
-//		}
+    public func attributedString(forScrollInvariantRow row: Int) -> AnyView {
+        guard let terminal = terminal else {
+            fatalError()
+        }
+        
+        //		guard let line = terminal.getScrollInvariantLine(row: row) else {
+        //			return AnyView(EmptyView())
+        //		}
         let line = terminal.buffer.lines[row]
-//        NSLog("NewTermLog: line[\(row)]=\(line)")
+        //        NSLog("NewTermLog: line[\(row)]=\(line)")
+        
+        let cursorPosition = terminal.getCursorLocation()
+        let scrollbackRows = terminal.getTopVisibleRow()
 
-		let cursorPosition = terminal.getCursorLocation()
-		let scrollbackRows = terminal.getTopVisibleRow()
-
+        return attributedString(line: line, cursorX: row - scrollbackRows == cursorPosition.y ? cursorPosition.x : -1)
+    }
+    
+    public func attributedString(line: BufferLine, cursorX: Int) -> AnyView {
 		var lastAttribute = Attribute.empty
 		var views = [AnyView]()
 		var buffer = ""
-		for j in 0..<terminal.cols {
+        for j in 0..<line.count {
 			let data = line[j]
-			let isCursor = cursorVisible && row - scrollbackRows == cursorPosition.y && j == cursorPosition.x
+			let isCursor = cursorVisible && j == cursorX
 
 			if isCursor || lastAttribute != data.attribute {
 				// Finish up the last run by appending it to the attributed string, then reset for the
@@ -72,7 +76,9 @@ open class StringSupplier {
 
 		return AnyView(HStack(alignment: .firstTextBaseline, spacing: 0) {
 			views.reduce(AnyView(EmptyView()), { $0 + $1 })
-		})
+		}
+//        .frame(maxWidth: .infinity, alignment: .leading)
+        )
 	}
 
 	private func text(_ run: String, attribute: Attribute, isCursor: Bool = false) -> AnyView {

@@ -153,6 +153,14 @@ class SubProcess {
 	var screenSize = ScreenSize.default {
 		didSet { updateWindowSize() }
 	}
+    
+    private var actived = false
+    func activeProcess() {
+        if !actived, let pid = childPID {
+            actived = true
+            kill(pid, SIGCONT)
+        }
+    }
 
 	func start(initialDirectory: String? = nil) throws {
 		if childPID != nil {
@@ -203,9 +211,14 @@ class SubProcess {
         
         logger.debug("Self.login=\(Self.login, privacy: .public)" )
         
+        var attr: posix_spawnattr_t?
+        posix_spawnattr_init(&attr)
+        defer { posix_spawnattr_destroy(&attr) }
+        
+        posix_spawnattr_setflags(&attr, Int16(POSIX_SPAWN_START_SUSPENDED))
 
 		var pid = pid_t()
-        let result = ie_posix_spawn(&pid, (rootfs(Self.login) as NSString).utf8String, &actions, nil, argv, envp)
+        let result = ie_posix_spawn(&pid, (rootfs(Self.login) as NSString).utf8String, &actions, &attr, argv, envp)
 		close(fds.replica)
 		if result != 0 {
 			// Fork failed.
@@ -300,8 +313,7 @@ class SubProcess {
 			// Read from output and notify delegate.
 			let bytes = buffer.bindMemory(to: UTF8Char.self, capacity: bytesRead)
 			let data = Array(UnsafeBufferPointer(start: bytes, count: bytesRead))
-            let s = String(data: Data(data), encoding: .ascii)
-            logger.debug("NewTermLog: output=\(s!, privacy: .public)" )
+            NSLog("NewTermLog: read=\(String(data: Data(data), encoding: .ascii))")
 			delegate?.subProcess(didReceiveData: data)
 		}
 		buffer.deallocate()
@@ -312,6 +324,7 @@ class SubProcess {
 			guard let fileDescriptor = self.fileDescriptor else {
 				return
 			}
+            NSLog("NewTermLog: write=\(String(data: Data(data), encoding: .ascii)) : \(data)")
 			_ = data.withUnsafeBytes { (buffer: UnsafeRawBufferPointer) in
 				Darwin.write(fileDescriptor, buffer.baseAddress!, buffer.count)
 			}

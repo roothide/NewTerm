@@ -8,7 +8,7 @@
 
 import Foundation
 
-class BufferSet {
+public class BufferSet {
     public var normal: Buffer
     public var alt: Buffer
     public private(set) var active: Buffer

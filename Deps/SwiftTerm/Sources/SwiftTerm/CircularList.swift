@@ -15,7 +15,7 @@ enum ArgumentError : Error {
 public class CircularList<T> {
     
     var array: [T?]
-    var startIndex: Int
+    public var startIndex: Int
     public var count: Int {
         get {
             return _count
@@ -34,7 +34,7 @@ public class CircularList<T> {
     }
     
     private var _count: Int
-    var maxLength: Int {
+    public var maxLength: Int {
         didSet {
             if maxLength != oldValue {
                 let empty : T? = nil

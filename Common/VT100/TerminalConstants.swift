@@ -58,6 +58,7 @@ public struct EscapeSequences {
 	public static let pageUp    = "\u{1b}[5~".utf8Array
 	public static let pageDown  = "\u{1b}[6~".utf8Array
 	public static let delete    = "\u{1b}[3~".utf8Array
+    public static let Delete    = "\u{1b}[3~".utf8Array
 
 	public static let fn        = [
 		"OP", "OQ", "OR", "OS", "[15~", "[17~", "[18~", "[19~", "[20~", "[21~", "[23~", "[24~"

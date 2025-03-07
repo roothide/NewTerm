@@ -13,7 +13,8 @@ struct KeyboardKeyButtonStyle: ButtonStyle {
 	var shadow = false
     var minWidth: CGFloat?
 	var halfHeight = false
-	var widthRatio: CGFloat?
+    var widthRatio: CGFloat?
+    var heightRatio: CGFloat?
 
 	func makeBody(configuration: Configuration) -> some View {
 		var height: CGFloat = 45
@@ -24,7 +25,9 @@ struct KeyboardKeyButtonStyle: ButtonStyle {
 			height = (height / 2) - 1
 			fontSize *= 0.9
 			cornerRadius *= 0.75
-		}
+        } else if let heightRatio = heightRatio {
+            height = height * heightRatio
+        }
 
 		let backgroundColor: Color
 		if configuration.isPressed {
@@ -38,7 +41,7 @@ struct KeyboardKeyButtonStyle: ButtonStyle {
 		return HStack(alignment: .center, spacing: 0) {
 			configuration.label
 				.font(.system(size: fontSize, weight: .regular).monospacedDigit())
-				.padding(.horizontal, isSmallDevice ? 4 : 8)
+//				.padding(.horizontal, isSmallDevice ? 4 : 8)
 				.padding(.vertical, halfHeight ? 0 : 6)
 				.foregroundColor(selected && !configuration.isPressed ? .black : .white)
 		}
@@ -55,19 +58,20 @@ struct KeyboardKeyButtonStyle: ButtonStyle {
 			.animation(nil)
 	}
 
-    init(selected: Bool = false, hasShadow shadow: Bool = false, halfHeight: Bool = false, widthRatio: CGFloat? = nil, minWidth: CGFloat? = nil) {
+    init(selected: Bool = false, hasShadow shadow: Bool = false, halfHeight: Bool = false, widthRatio: CGFloat? = nil, minWidth: CGFloat? = nil, heightRatio: CGFloat? = nil) {
 		self.selected = selected
 		self.shadow = shadow
         self.minWidth = minWidth
 		self.halfHeight = halfHeight
 		self.widthRatio = widthRatio
+        self.heightRatio = heightRatio
 	}
 }
 
 extension ButtonStyle where Self == KeyboardKeyButtonStyle {
 	/// A button style that mimicks the keys of the software keyboard.
-	static func keyboardKey(selected: Bool = false, hasShadow shadow: Bool = false, halfHeight: Bool = false, widthRatio: CGFloat? = nil, minWidth: CGFloat? = nil) -> KeyboardKeyButtonStyle {
-		KeyboardKeyButtonStyle(selected: selected, hasShadow: shadow, halfHeight: halfHeight, widthRatio: widthRatio, minWidth: minWidth)
+	static func keyboardKey(selected: Bool = false, hasShadow shadow: Bool = false, halfHeight: Bool = false, widthRatio: CGFloat? = nil, minWidth: CGFloat? = nil, heightRatio: CGFloat? = nil) -> KeyboardKeyButtonStyle {
+		KeyboardKeyButtonStyle(selected: selected, hasShadow: shadow, halfHeight: halfHeight, widthRatio: widthRatio, minWidth: minWidth, heightRatio: heightRatio)
 	}
 }
 

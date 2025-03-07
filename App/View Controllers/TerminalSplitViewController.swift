@@ -50,7 +50,8 @@ class TerminalSplitViewController: BaseTerminalSplitViewControllerChild {
 	private var splitPercentages = [Double]()
 	private var oldSplitPercentages = [Double]()
 	private var constraints = [NSLayoutConstraint]()
-
+    
+    public var terminalIndex = 0
 	private var selectedIndex = 0
 
 	private var keyboardVisible = false
@@ -75,11 +76,13 @@ class TerminalSplitViewController: BaseTerminalSplitViewControllerChild {
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
 
+        self.keyboardVisible = false
 		NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardVisibilityChanged(_:)), name: UIResponder.keyboardWillShowNotification, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardVisibilityChanged(_:)), name: UIResponder.keyboardDidShowNotification, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardVisibilityChanged(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardVisibilityChanged(_:)), name: UIResponder.keyboardDidHideNotification, object: nil)
-		NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardVisibilityChanged(_:)), name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardVisibilityChanged(_:)), name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardVisibilityChanged(_:)), name: UIResponder.keyboardDidChangeFrameNotification, object: nil)
 	}
 
 	override func viewWillDisappear(_ animated: Bool) {
@@ -91,7 +94,8 @@ class TerminalSplitViewController: BaseTerminalSplitViewControllerChild {
 		NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardDidShowNotification, object: nil)
 		NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
 		NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardDidHideNotification, object: nil)
-		NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardDidChangeFrameNotification, object: nil)
 	}
 
 	override func updateViewConstraints() {
@@ -114,6 +118,13 @@ class TerminalSplitViewController: BaseTerminalSplitViewControllerChild {
 		super.traitCollectionDidChange(previousTraitCollection)
 		updateConstraints()
 	}
+    
+    override func removeFromParent() {
+        super.removeFromParent()
+        self.viewControllers.map { viewController in
+            viewController.removeFromParent()
+        }
+    }
 
 	// MARK: - Split View
 
@@ -190,6 +201,7 @@ class TerminalSplitViewController: BaseTerminalSplitViewControllerChild {
 		}
 
 		viewControllers.remove(at: index)
+        viewController.removeFromParent()
 
 		if viewControllers.isEmpty {
 			// All view controllers in the split have been removed, so remove ourselves.
@@ -230,54 +242,86 @@ class TerminalSplitViewController: BaseTerminalSplitViewControllerChild {
 	}
 
 	// MARK: - Keyboard
+    private var keyboardToolbarHeight: Double = 0
+    public func keyboardToolbarHeightChanged(height: Double) {
+        NSLog("NewTermLog: T\(terminalIndex) keyboardToolbarHeightChanged \(height)-\(self.parent?.view.safeAreaInsets.bottom) keyboardVisible=\(keyboardVisible)")
+        if UIDevice.current.userInterfaceIdiom == .pad && !keyboardVisible {
+            //Floating Keyboard
+            let bottomInset = self.parent?.view.safeAreaInsets.bottom ?? 0
+            self.additionalSafeAreaInsets.bottom = max(0, height - bottomInset)
+            self.keyboardToolbarHeight = height
+        }
+    }
 
-	@objc func keyboardVisibilityChanged(_ notification: Notification) {
-		guard let userInfo = notification.userInfo,
-					let keyboardFrame = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect,
-					let animationDuration = userInfo[UIResponder.keyboardAnimationDurationUserInfoKey] as? TimeInterval,
-					let curve = userInfo[UIResponder.keyboardAnimationCurveUserInfoKey] as? UInt else {
-			return
-		}
+    @objc func keyboardVisibilityChanged(_ notification: Notification) {
+        NSLog("NewTermLog: T\(terminalIndex) keyboardVisibilityChanged \(notification.name.rawValue) visible=\(keyboardVisible) local=\(notification.userInfo?[UIResponder.keyboardIsLocalUserInfoKey] ?? "")  \(notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] ?? "")")
+        
+        guard let userInfo = notification.userInfo,
+              let isLocal = userInfo[UIResponder.keyboardIsLocalUserInfoKey] as? Bool,
+              let keyboardFrame = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect,
+              let animationDuration = userInfo[UIResponder.keyboardAnimationDurationUserInfoKey] as? TimeInterval,
+              let curve = userInfo[UIResponder.keyboardAnimationCurveUserInfoKey] as? UInt else {
+            return
+        }
+        //        NSLog("NewTermLog: keyboardVisibilityChanged notification=\(notification)")
+        
+        // We do this to avoid the scroll indicator from appearing as soon as the terminal appears.
+        // We only want to see it after the keyboard has appeared.
+        //		if !hasAppeared {
+        //			hasAppeared = true
+        //			textView.showsVerticalScrollIndicator = true
+        //
+        //			if let error = failureError {
+        //				// Try to handle the error again now that the UI is ready.
+        //				didReceiveError(error: error)
+        //				failureError = nil
+        //			}
+        //		}
+        
+        // We update the safe areas in an animation block to force it to be animated with the exact
+        // parameters given to us in the notification.
+        func update(bottom: CGFloat) {
+            NSLog("NewTermLog: T\(terminalIndex) keyboardVisibilityChanged update bottom=\(bottom) parent=\(self.parent?.view.safeAreaInsets.bottom)")
+            if self.additionalSafeAreaInsets.bottom.isEqual(to: bottom) {
+                NSLog("NewTermLog: T\(terminalIndex) keyboardVisibilityChanged update ignored")
+                return
+            }
+            
+            var options: UIView.AnimationOptions = .beginFromCurrentState
+            options.insert(.init(rawValue: curve << 16))
 
-		// We do this to avoid the scroll indicator from appearing as soon as the terminal appears.
-		// We only want to see it after the keyboard has appeared.
-//		if !hasAppeared {
-//			hasAppeared = true
-//			textView.showsVerticalScrollIndicator = true
-//
-//			if let error = failureError {
-//				// Try to handle the error again now that the UI is ready.
-//				didReceiveError(error: error)
-//				failureError = nil
-//			}
-//		}
-
-		switch notification.name {
-		case UIResponder.keyboardWillShowNotification: keyboardVisible = true
-		case UIResponder.keyboardDidHideNotification:  keyboardVisible = false
-		default: break
-		}
-
-		// Hide toolbar popups if visible
-//		keyInput.setMoreRowVisible(false, animated: true)
-
-		// Determine the final keyboard height. We still get a height if hiding, so force it to 0 if
-		// this isn’t a show notification.
-		keyboardHeight = keyboardVisible && notification.name != UIResponder.keyboardWillHideNotification ? keyboardFrame.size.height : 0
-
-		// We update the safe areas in an animation block to force it to be animated with the exact
-		// parameters given to us in the notification.
-		var options: UIView.AnimationOptions = .beginFromCurrentState
-		options.insert(.init(rawValue: curve << 16))
-
-		UIView.animate(withDuration: animationDuration,
-									 delay: 0,
-									 options: options) {
-			let bottomInset = self.parent?.view.safeAreaInsets.bottom ?? 0
-			self.additionalSafeAreaInsets.bottom = max(bottomInset, self.keyboardHeight - bottomInset)
-		}
-	}
-
+            UIView.animate(withDuration: animationDuration, delay: 0, options: options) {
+                self.additionalSafeAreaInsets.bottom = bottom
+            }
+        }
+        
+        switch notification.name {
+        case UIResponder.keyboardWillShowNotification:
+            if !keyboardFrame.size.height.isZero {
+                keyboardVisible = true
+            }
+            if isLocal && keyboardVisible {
+                let bottomInset = self.parent?.view.safeAreaInsets.bottom ?? 0
+                let bottom = max(0, keyboardFrame.size.height - bottomInset)
+                update(bottom: bottom)
+            }
+            
+        case UIResponder.keyboardWillHideNotification:
+            if keyboardVisible {
+                keyboardVisible = false
+                update(bottom: 0)
+            }
+            
+        case UIResponder.keyboardDidHideNotification:
+            if keyboardVisible {
+                //Dock -> Floating
+                keyboardVisible = false
+            }
+            
+        default:
+            break
+        }
+    }
 }
 
 extension TerminalSplitViewController: TerminalSplitViewControllerDelegate {

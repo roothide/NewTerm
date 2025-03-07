@@ -11,6 +11,7 @@ import SwiftTerm
 import NewTermCommon
 
 class TerminalState: ObservableObject {
+    @Published var scroll = 0
 	@Published var lines = [AnyView]()
 	@Published var fontMetrics = FontMetrics(font: AppFont(), fontSize: 12)
 	@Published var colorMap = ColorMap(theme: AppTheme())
@@ -33,23 +34,25 @@ struct TerminalView: View {
 							.id(i)
 					}
 				}
-					.padding(.vertical, Self.verticalSpacing)
-					.padding(.horizontal, Self.horizontalSpacing)
-					.background(Color(state.colorMap.background))
+                .padding(.vertical, Self.verticalSpacing)
+                .padding(.horizontal, Self.horizontalSpacing)
+                .background(Color(state.colorMap.background))
 			}
-				.background(Color(state.colorMap.background))
-				.onChange(of: state.lines.indices.last, perform: { _ in
-					scrollView.scrollTo(state.lines.indices.last, anchor: .bottom)
-				})
+            .background(Color(state.colorMap.background))
+            .onChange(of: state.scroll, perform: { _ in
+                NSLog("NewTermLog: scrollTo \(state.lines.indices.last)")
+                scrollView.scrollTo(state.lines.indices.last, anchor: .bottom)
+            })
 		}
-			.opacity(state.isSplitViewResizing ? 0.6 : 1)
-			.animation(.linear(duration: 0.1), value: state.isSplitViewResizing)
+        .opacity(state.isSplitViewResizing ? 0.6 : 1)
+        .animation(.linear(duration: 0.1), value: state.isSplitViewResizing)
 
-		if #available(iOS 15, *) {
-			return view
-				.accessibilityTextContentType(.console)
+        if #available(iOS 16, *) {
+            view.accessibilityTextContentType(.console).scrollDismissesKeyboard(.interactively)
+        } else if #available(iOS 15, *) {
+            view.accessibilityTextContentType(.console)
 		} else {
-			return view
+            view
 		}
 	}
 }
@@ -83,9 +86,6 @@ struct TerminalSampleView: View {
 	private let delegate = TerminalSampleViewDelegate()
 	private let state = TerminalState()
 
-	private let timer = Timer.publish(every: 1, on: .main, in: .common)
-		.autoconnect()
-
 	init(fontMetrics: FontMetrics = FontMetrics(font: AppFont(), fontSize: 12),
 			 colorMap: ColorMap = ColorMap(theme: AppTheme())) {
         NSLog("NewTermLog: TerminalSampleView.init \(fontMetrics) \(colorMap)")
@@ -106,6 +106,8 @@ struct TerminalSampleView: View {
 		if let colorTest = try? Data(contentsOf: Bundle.main.url(forResource: "colortest", withExtension: "txt")!) {
 			terminal?.feed(byteArray: [UTF8Char](colorTest))
 		}
+
+        state.lines = Array(0...(terminal.rows + terminal.getTopVisibleRow())).map { stringSupplier.attributedString(forScrollInvariantRow: $0) }
 	}
 
 	var body: some View {
@@ -126,11 +128,6 @@ struct TerminalSampleView: View {
 				terminal.resize(cols: Int(size.width / glyphSize.width),
 												rows: 32)
 			})
-			.onReceive(timer) { _ in
-                NSLog("NewTermLog: state.lines.count=\(state.lines.count)")
-				state.lines = Array(0...(terminal.rows + terminal.getTopVisibleRow()))
-					.map { stringSupplier.attributedString(forScrollInvariantRow: $0) }
-			}
 	}
 }
 

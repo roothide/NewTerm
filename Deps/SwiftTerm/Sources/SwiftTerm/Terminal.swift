@@ -277,7 +277,7 @@ open class Terminal {
     var options: TerminalOptions
     
     // The current buffers
-    var buffers : BufferSet!
+    public var buffers : BufferSet!
     
     // Whether the terminal is operating in application keypad mode
     var applicationKeypad : Bool = false
@@ -1143,6 +1143,7 @@ open class Terminal {
     // the rules for wrapping around, scrolling and overflow expected in the terminal.
     func insertCharacter (_ charData: CharData)
     {
+        // NSLog("NewTermLog: insertCharacter: c=\(charData.code):\(charData) cols=\(cols) x=\(buffer.x) y=\(buffer.y) chw=\(charData.width) wr=\(wraparound) mode=\(marginMode) mr=\(buffer.marginRight) sb=\(buffer.scrollBottom)")
         let buffer = self.buffer
         var chWidth = Int (charData.width)
         var bufferRow = buffer.lines [buffer.y + buffer.yBase]
@@ -1162,6 +1163,7 @@ open class Terminal {
                 if buffer.y >= buffer.scrollBottom {
                     scroll (isWrapped: true)
                 } else {
+                    // NSLog("NewTermLog: insertCharacter: break!")
                     // The line already exists (eg. the initial viewport), mark it as a
                     // wrapped line
                     buffer.y += 1

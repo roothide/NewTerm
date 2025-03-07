@@ -31,3 +31,6 @@ include $(THEOS_MAKE_PATH)/xcodeproj.mk
 
 after-stage::
 	@$(TARGET_CODESIGN) $(NewTerm_CODESIGN_FLAGS) $(THEOS_STAGING_DIR)$(INSTALL_PREFIX)/Applications/NewTerm.app/NewTermLoginHelper
+
+clean::
+	rm -rf ./packages/*
